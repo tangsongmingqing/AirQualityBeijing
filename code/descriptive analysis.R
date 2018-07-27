@@ -120,15 +120,19 @@ m = rbind.data.frame(x, z[2, ])
 colnames(m) = c("station", "2013", "2014", "2015", "2016", "2017")
 write.csv(m, file = "allNA_percentage.csv")
 #bar plot of number of missing values
-m = read_csv("allNA_percentage.csv")
+x = read_csv("output/missing value/allNA_percentage.csv")
+m=t(x[ ,3:7])
 path = "~/AirQualityBeijing/output/NApercentage.pdf"
 pdf(file = path)
-xx = barplot(t(m[,2:6]), beside=T, ylab="Percentage of Missing Values", 
-             cex.names=0.8, las=2, ylim=c(0,50), horiz = T,
+par(xpd=T, mar=par()$mar+c(0,0,0,5))
+xx = barplot(t(x[,3:7]), ylab="Percentage of Missing Values", 
+             cex.names=0.8, las=2,
              col=c("red","orange", "yellow","green","blue"))
 box(bty="l")
-text(x=xx, y=m$station, label=as.matrix(m[,2:6]), pos = 3, cex = 0.8, col = "red")
-axis(1, at = xx, labels = m$station, tick = F, las = 2, line = -0.5, cex.axis=0.8)
+axis(1, at = xx, labels = x$station, tick = F, las = 1, line = -1.4, cex.axis=0.41)
+legend(locator(1), inset=c(0,1), xpd=TRUE,
+       legend = c("2013", "2014", "2015", "2016","2017"), 
+       fill = c("red","orange", "yellow","green","blue"))
 dev.off()
 #percentage of missing values
 pernaplot = naplot
