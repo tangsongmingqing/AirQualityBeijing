@@ -124,7 +124,7 @@ x = read_csv("output/missing value/allNA_percentage.csv")
 m=t(x[ ,3:7])
 path = "~/AirQualityBeijing/output/NApercentage.pdf"
 pdf(file = path)
-par(xpd=T, mar=par()$mar+c(0,0,0,5))
+par(xpd=T, mar=par()$mar+c(0,0,0,3))
 xx = barplot(t(x[,3:7]), ylab="Percentage of Missing Values", 
              cex.names=0.8, las=2,
              col=c("red","orange", "yellow","green","blue"))
@@ -134,14 +134,4 @@ legend(locator(1), inset=c(0,1), xpd=TRUE,
        legend = c("2013", "2014", "2015", "2016","2017"), 
        fill = c("red","orange", "yellow","green","blue"))
 dev.off()
-#percentage of missing values
-pernaplot = naplot
-pernaplot$Value = round(pernaplot$Value/3653*100, 4)
-path = "~/luft_qualitaet/output/NApercentage.pdf"
-pdf(file = path)
-xx = barplot(pernaplot$Value, beside=T, ylab="Percentage of Missing Values", 
-             cex.names=0.8, las=2, ylim=c(0,10), col=c("darkblue","red"))
-box(bty="l")
-text(x=xx, y=pernaplot$Value, label=paste(pernaplot$Value,"%"), pos = 3, cex = 0.8, col = "red")
-axis(1, at = xx, labels = colnames(allstation)[-1], tick = F, las = 2, line = -0.5, cex.axis=0.8)
-dev.off()
+
