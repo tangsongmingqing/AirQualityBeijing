@@ -94,8 +94,7 @@ for(i in 1:5){
 write.csv(usnacount, file = "usnacount.csv")
 write.csv(usna_percent, file = "usnapercent.csv")
 
-
-usna_percent = usnacount            
+##################values outside of interval of [0,500] are assigned with "NA"############         
 us2013 = usPM2.52013
 us2013$Value[us2013$Value < 0 | us2013$Value > 500] <- NA
 saveRDS(us2013, file = "~/AirQualityBeijing/data/usPM2.5NA/us2013.RDS")
@@ -112,25 +111,24 @@ us2017 = usPM2.52017
 us2017$Value[us2017$Value < 0 | us2017$Value > 500] <- NA
 saveRDS(us2017, file = "~/AirQualityBeijing/data/usPM2.5NA/us2017.RDS")
 
-
-
-
-
-
-naplot = as.data.frame(nalist)
-naplot = cbind(c(rep("MC174",5), rep("MC42",5)), naplot)
-naplot = cbind(rep(c("NO2","NOx","PM10","Benzol","Toluol"),2), naplot)
-colnames(naplot) = c("station", "Pollutant", "Value")
-#missingness map
-missmap(allstation[, 2:11])
+#create missing value percentage plots
+x = read_csv("napercent.csv")
+y = read_csv("usnapercent.csv")
+z = cbind.data.frame(c("us"), t(y))
+colnames(z) = c("X1", "nap2013", "nap2014", "nap2015", "nap2016", "nap2017")
+m = rbind.data.frame(x, z[2, ])
+colnames(m) = c("station", "2013", "2014", "2015", "2016", "2017")
+write.csv(m, file = "allNA_percentage.csv")
 #bar plot of number of missing values
-path = "~/luft_qualitaet/output/NAcount.pdf"
+m = read_csv("allNA_percentage.csv")
+path = "~/AirQualityBeijing/output/NApercentage.pdf"
 pdf(file = path)
-xx = barplot(naplot$Value, beside=T, ylab="Number of Missing Values", 
-             cex.names=0.8, las=2, ylim=c(0,350), col=c("darkblue","red"))
+xx = barplot(t(m[,2:6]), beside=T, ylab="Percentage of Missing Values", 
+             cex.names=0.8, las=2, ylim=c(0,50), horiz = T,
+             col=c("red","orange", "yellow","green","blue"))
 box(bty="l")
-text(x=xx, y=naplot$Value, label=naplot$Value, pos = 3, cex = 0.8, col = "red")
-axis(1, at = xx, labels = colnames(allstation)[-1], tick = F, las = 2, line = -0.5, cex.axis=0.8)
+text(x=xx, y=m$station, label=as.matrix(m[,2:6]), pos = 3, cex = 0.8, col = "red")
+axis(1, at = xx, labels = m$station, tick = F, las = 2, line = -0.5, cex.axis=0.8)
 dev.off()
 #percentage of missing values
 pernaplot = naplot
