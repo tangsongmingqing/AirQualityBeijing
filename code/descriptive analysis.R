@@ -124,14 +124,28 @@ x = read_csv("output/missing value/allNA_percentage.csv")
 m=t(x[ ,3:7])
 path = "~/AirQualityBeijing/output/NApercentage.pdf"
 pdf(file = path)
-par(xpd=T, mar=par()$mar+c(0,0,0,3))
+par(xpd=T, mar=par()$mar+c(0,0,0,4))
 xx = barplot(t(x[,3:7]), ylab="Percentage of Missing Values", 
              cex.names=0.8, las=2,
              col=c("red","orange", "yellow","green","blue"))
 box(bty="l")
 axis(1, at = xx, labels = x$station, tick = F, las = 1, line = -1.4, cex.axis=0.41)
-legend(locator(1), inset=c(0,1), xpd=TRUE,
+legend(locator(1), inset=c(0,1), xpd=TRUE,bty='n',
        legend = c("2013", "2014", "2015", "2016","2017"), 
        fill = c("red","orange", "yellow","green","blue"))
 dev.off()
 
+###################################################################################
+
+#################################################################################
+###########daily average#########################################################
+b2013 = aggregate(pm2.5_2013[, 4:31], list(pm2.5_2013$date), mean, na.rm = TRUE)
+b2014 = aggregate(pm2.5_2014[, 4:31], list(pm2.5_2014$date), mean, na.rm = TRUE)
+b2015 = aggregate(pm2.5_2015[, 4:31], list(pm2.5_2015$date), mean, na.rm = TRUE)
+b2016 = aggregate(pm2.5_2016[, 4:31], list(pm2.5_2016$date), mean, na.rm = TRUE)
+b2017 = aggregate(pm2.5_2017[, 4:31], list(pm2.5_2017$date), mean, na.rm = TRUE)
+saveRDS(b2013, file = "~/AirQualityBeijing/data/daily average/b2013.RDS")
+saveRDS(b2014, file = "~/AirQualityBeijing/data/daily average/b2014.RDS")
+saveRDS(b2015, file = "~/AirQualityBeijing/data/daily average/b2015.RDS")
+saveRDS(b2016, file = "~/AirQualityBeijing/data/daily average/b2016.RDS")
+saveRDS(b2017, file = "~/AirQualityBeijing/data/daily average/b2017.RDS")
