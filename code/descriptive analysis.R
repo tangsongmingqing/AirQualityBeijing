@@ -149,3 +149,123 @@ saveRDS(b2014, file = "~/AirQualityBeijing/data/daily average/b2014.RDS")
 saveRDS(b2015, file = "~/AirQualityBeijing/data/daily average/b2015.RDS")
 saveRDS(b2016, file = "~/AirQualityBeijing/data/daily average/b2016.RDS")
 saveRDS(b2017, file = "~/AirQualityBeijing/data/daily average/b2017.RDS")
+u2013 = aggregate(us2013$Value, list(us2013$Month, us2013$Day), mean, na.rm = TRUE)
+x = u2013[-c(1:4), ]
+saveRDS(u2013, file = "~/AirQualityBeijing/data/daily average/u2013.RDS")
+u2014 = aggregate(us2014$Value, list(us2014$Month, us2014$Day), mean, na.rm = TRUE)
+saveRDS(u2014, file = "~/AirQualityBeijing/data/daily average/u2014.RDS")
+u2015 = aggregate(us2015$Value, list(us2015$Month, us2015$Day), mean, na.rm = TRUE)
+saveRDS(u2015, file = "~/AirQualityBeijing/data/daily average/u2015.RDS")
+u2016 = aggregate(us2016$Value, list(us2016$Month, us2016$Day), mean, na.rm = TRUE)
+saveRDS(u2016, file = "~/AirQualityBeijing/data/daily average/u2016.RDS")
+u2017 = aggregate(us2017$Value, list(us2017$Month, us2017$Day), mean, na.rm = TRUE)
+saveRDS(u2017, file = "~/AirQualityBeijing/data/daily average/u2017.RDS")
+##########################yearly average###########################################
+yu2013 = colMeans(u2013, na.rm = T)
+yu2014 = colMeans(u2014, na.rm = T)
+yu2015 = colMeans(u2015, na.rm = T)
+yu2016 = colMeans(u2016, na.rm = T)
+yu2017 = colMeans(u2017, na.rm = T)
+yb2013 = colMeans(b2013, na.rm = T)
+yb2014 = colMeans(b2014, na.rm = T)
+yb2015 = colMeans(b2015, na.rm = T)
+yb2016 = colMeans(b2016, na.rm = T)
+yb2017 = colMeans(b2017, na.rm = T)
+
+x = data.frame(yb2013, yb2014, yb2015, yb2016, yb2017)
+y = round(t(x[2:29, ]),2)
+rownames(y) = c("2013", "2014", "2015", "2016", "2017")
+
+m = data.frame(yu2013, yu2014, yu2015, yu2016, yu2017)
+n = round(t(x[3, ]),2)
+rownames(n) = c("2013", "2014", "2015", "2016", "2017")
+colnames(n) = c("us")
+allyear = cbind(y, n)
+saveRDS(allyear, file = "~/AirQualityBeijing/data/yearly average/allyear.RDS")
+
+#generate plots for yearly mean for each pollutants
+allyear = readRDS("~/AirQualityBeijing/data/yearly average/allyear.RDS")
+data = as.data.frame(allyear)
+
+path = "~/AirQualityBeijing/output/mean.pdf"
+pdf(file = path)
+ggplot(data = data, aes(x = 2013:2017)) +
+  geom_line(aes( y=data$`1`) , size = 0.2)+
+  geom_line(aes( y=data$`2`), size = 0.2)+
+  geom_line(aes( y=data$`3`), size = 0.2)+
+  geom_line(aes( y=data$`4`), size = 0.2)+
+  geom_line(aes( y=data$`5`), size = 0.2)+
+  geom_line(aes( y=data$`6`), size = 0.9)+
+  geom_line(aes( y=data$`7`) , size = 0.2)+
+  geom_line(aes( y=data$`8`), size = 0.2)+
+  geom_line(aes( y=data$`10`), size = 0.2)+
+  geom_line(aes( y=data$`11`), size = 0.2)+
+  geom_line(aes( y=data$`12`), size = 0.2)+
+  geom_line(aes( y=data$us), size = 0.9, linetype = "dotted")+
+  geom_hline(yintercept = 35, col="red")+
+  ggtitle("urban area")+
+  ylim(30,150)+
+  theme(axis.title=element_blank(),
+        panel.background = element_rect(fill = "white", color = "grey"),
+        panel.grid.major = element_line(colour = "grey", size = 0.2),
+        plot.title = element_text(size = 25),
+        axis.text = element_text(size=20))
+
+ggplot(data = data, aes(x = 2013:2017)) +
+  geom_line(aes( y=data$`13`), size = 0.2)+
+  geom_line(aes( y=data$`14`), size = 0.2)+
+  geom_line(aes( y=data$`15`), size = 0.2)+
+  geom_line(aes( y=data$`17`), size = 0.2)+
+  geom_line(aes( y=data$`18`), size = 0.2)+
+  geom_line(aes( y=data$`20`), size = 0.2)+
+  geom_line(aes( y=data$`21`), size = 0.2)+
+  geom_line(aes( y=data$`22`), size = 0.2)+
+  geom_line(aes( y=data$`23`), size = 0.2)+
+  geom_hline(yintercept = 35, col="red")+
+  ggtitle("rural area")+
+  ylim(30,150)+
+  theme(axis.title=element_blank(),
+        panel.background = element_rect(fill = "white", color = "grey"),
+        panel.grid.major = element_line(colour = "grey", size = 0.2),
+        plot.title = element_text(size = 25),
+        axis.text = element_text(size=20))
+
+ggplot(data = data, aes(x = 2013:2017)) +
+  geom_line(aes( y=data$`24`), size = 0.2)+
+  geom_line(aes( y=data$`25`), size = 0.2)+
+  geom_line(aes( y=data$`26`), size = 0.2)+
+  geom_line(aes( y=data$`27`), size = 0.2)+
+  geom_line(aes( y=data$`28`), size = 0.2)+
+  geom_hline(yintercept = 35, col="red")+
+  ggtitle("traffic intensive area")+
+  ylim(30,150)+
+  theme(axis.title=element_blank(),
+        panel.background = element_rect(fill = "white", color = "grey"),
+        panel.grid.major = element_line(colour = "grey", size = 0.2),
+        plot.title = element_text(size = 25),
+        axis.text = element_text(size=20))
+dev.off()
+#######################box-plot#################################
+rm(list = ls(all = TRUE))
+graphics.off()
+u2013 = readRDS("~/AirQualityBeijing/data/daily average/u2013.RDS")
+u2014 = readRDS("~/AirQualityBeijing/data/daily average/u2014.RDS")
+u2015 = readRDS("~/AirQualityBeijing/data/daily average/u2015.RDS")
+u2016 = readRDS("~/AirQualityBeijing/data/daily average/u2016.RDS")
+u2017 = readRDS("~/AirQualityBeijing/data/daily average/u2017.RDS")
+a = merge(u2013, u2014, by = c("Group.1", "Group.2"), all = TRUE)
+b = merge(a, u2015, by = c("Group.1", "Group.2"), all = TRUE)
+c = merge(b, u2016, by = c("Group.1", "Group.2"), all = TRUE)
+allus = merge(c, u2017, by = c("Group.1", "Group.2"), all = TRUE)
+colnames(allus) = c("month", "day", "2013", "2014", "2015", "2016", "2017")
+allus = round(allus, 2)
+saveRDS(allus, file = "~/AirQualityBeijing/data/daily average/allus.RDS")
+#load data set for each measure station
+allM174 = readRDS("~/luft_qualitaet/data/allM174.RDS")
+allM42 = readRDS("~/luft_qualitaet/data/allM42.RDS")
+#generate box plot for each pollutants
+path = "~/luft_qualitaet/output/boxplot.pdf"
+pdf(file = path)
+xx = boxplot(b2013[ ,-1], col = c("purple", "orange", "yellow","green", "blue"), outline=FALSE, ylim=c(0,210), main="Air Quality of MC174 2008-2017")
+yy = boxplot(allM42[, 2:6], col = c("purple", "orange", "yellow","green", "blue"), outline=FALSE, ylim=c(0,210), main="Air Quality of MC42 2008-2017")
+dev.off()
