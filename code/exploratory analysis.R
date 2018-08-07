@@ -116,6 +116,11 @@ over_percent = data.frame(pu, pr, pt, pe)
 colnames(over_percent)= c("urban", "rural", "traffic", "us")
 row.names(over_percent)=c("2013", "2014", "2015", "2016", "2017")
 write.csv(over_percent, file = "~/AirQualityBeijing/output/over_percent.CSV")
-
-
+##################extreme value Dates###############################################
+Du = allarea_Date$Date[order(allarea_Date$urban, decreasing=TRUE)][1:10]
+Dr = allarea_Date$Date[order(allarea_Date$rural, decreasing=TRUE)][1:10]
+Dt = allarea_Date$Date[order(allarea_Date$traffic, decreasing=TRUE)][1:10]
+De = allarea_Date$Date[order(allarea_Date$us, decreasing=TRUE)][1:10]
+Date10 = data.frame(Du, Dr, Dt, De)
+write.csv(Date10, file = "~/AirQualityBeijing/output/Date10.CSV")
 
