@@ -3,7 +3,7 @@ rm(list = ls(all = TRUE))
 graphics.off()
 
 #libraries needed in this file
-libraries = c("reshape2", "mclust", "andrews", "zoo", "cluster", "psych", "lattice")
+libraries = c("reshape2", "mclust", "andrews", "zoo", "cluster", "psych", "lattice", "rdd")
 lapply(libraries, library, quietly=TRUE, character.only=TRUE)
 
 #############################seasonality analysis##############################
@@ -123,4 +123,64 @@ Dt = allarea_Date$Date[order(allarea_Date$traffic, decreasing=TRUE)][1:10]
 De = allarea_Date$Date[order(allarea_Date$us, decreasing=TRUE)][1:10]
 Date10 = data.frame(Du, Dr, Dt, De)
 write.csv(Date10, file = "~/AirQualityBeijing/output/Date10.CSV")
-
+####################factor analysis#################################################
+x = allM174[, 2:6]
+KMO(x)#>0.5 suitable for factor analysis
+scree(x)# one factor and two factor
+f11 = fa(x, rotate = "none")#different extraction methods have similar results
+f21 = fa(x, nfactors = 2, rotate = "none", fm = "ml")#other extraction methods have an ultra-Heywood case
+x = allM42[, 2:6]
+KMO(x)#>0.5 suitable for factor analysis
+scree(x)# one factor and two factor
+f11 = fa(x, rotate = "none")
+f21 = fa(x, nfactors = 2, rotate = "none", fm = "ml")
+#################discontinuity test##############################################
+name = c("theta", "P-value")
+station = as.character(1:28)
+DCresult2014 = data.frame(1:28, 1:28)
+colnames(DCresult2014) = name
+for ( i in 1:28){
+  data = c(b2013[ ,i+1], b2014[ ,i+1])
+  t = DCdensity(data, 75, ext.out = TRUE)
+  DCresult2014[i, 1] = t$theta
+  DCresult2014[i, 2] = t$p
+}#data set for station 19 has constant error message, reason cannot be identified
+for ( i in 20:28){
+  data = c(b2013[ ,i+1], b2014[ ,i+1])
+  t = DCdensity(data, 75, ext.out = TRUE)
+  DCresult2014[i, 1] = t$theta
+  DCresult2014[i, 2] = t$p}
+DCresult2014 = round(DCresult2014, 3)
+write.csv(DCresult2014, file = "~/AirQualityBeijing/output/McCrary/DCresult2014.CSV")
+DCresult2015 = data.frame(1:28, 1:28)
+colnames(DCresult2015) = name
+for ( i in 1:28){
+  data = b2015[ ,i+1]
+  t = DCdensity(data, 75, ext.out = TRUE)
+  DCresult2015[i, 1] = t$theta
+  DCresult2015[i, 2] = t$p
+}
+write.csv(DCresult2015, file = "~/AirQualityBeijing/output/McCrary/DCresult2015.CSV")
+DCresult2016 = data.frame(1:28, 1:28)
+colnames(DCresult2016) = name
+for ( i in 1:28){
+  data = b2016[ ,i+1]
+  t = DCdensity(data, 75, ext.out = TRUE)
+  DCresult2016[i, 1] = t$theta
+  DCresult2016[i, 2] = t$p
+}
+write.csv(DCresult2016, file = "~/AirQualityBeijing/output/McCrary/DCresult2016.CSV")
+DCresult2017 = data.frame(1:28, 1:28)
+colnames(DCresult2017) = name
+for ( i in 1:28){
+  data = b2017[ ,i+1]
+  t = DCdensity(data, 75, ext.out = TRUE)
+  DCresult2017[i, 1] = t$theta
+  DCresult2017[i, 2] = t$p
+}
+write.csv(DCresult2017, file = "~/AirQualityBeijing/output/McCrary/DCresult2017.CSV")
+table = cbind(DCresult2014, DCresult2015)
+table = cbind(table, DCresult2016)
+table = cbind(table, DCresult2017)
+table = round(table, 3)
+write.csv(table, file = "~/AirQualityBeijing/output/McCrary/DC_allstation.CSV")
