@@ -124,16 +124,12 @@ De = allarea_Date$Date[order(allarea_Date$us, decreasing=TRUE)][1:10]
 Date10 = data.frame(Du, Dr, Dt, De)
 write.csv(Date10, file = "~/AirQualityBeijing/output/Date10.CSV")
 ####################factor analysis#################################################
-x = allM174[, 2:6]
+x = allarea_Date[, 2:5]
 KMO(x)#>0.5 suitable for factor analysis
 scree(x)# one factor and two factor
 f11 = fa(x, rotate = "none")#different extraction methods have similar results
 f21 = fa(x, nfactors = 2, rotate = "none", fm = "ml")#other extraction methods have an ultra-Heywood case
-x = allM42[, 2:6]
-KMO(x)#>0.5 suitable for factor analysis
-scree(x)# one factor and two factor
-f11 = fa(x, rotate = "none")
-f21 = fa(x, nfactors = 2, rotate = "none", fm = "ml")
+
 #################discontinuity test##############################################
 name = c("theta", "P-value")
 station = as.character(1:28)
@@ -184,3 +180,6 @@ table = cbind(table, DCresult2016)
 table = cbind(table, DCresult2017)
 table = round(table, 3)
 write.csv(table, file = "~/AirQualityBeijing/output/McCrary/DC_allstation.CSV")
+summary(b2013)$coeffients
+#robustness check
+r = DCdensity(allarea_Date$us, 75, ext.out = TRUE)
