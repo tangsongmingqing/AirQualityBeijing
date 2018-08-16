@@ -180,6 +180,11 @@ table = cbind(table, DCresult2016)
 table = cbind(table, DCresult2017)
 table = round(table, 3)
 write.csv(table, file = "~/AirQualityBeijing/output/McCrary/DC_allstation.CSV")
-summary(b2013)$coeffients
+ru = DCdensity(allarea_Date$urban, 75, ext.out = TRUE)
+rr = DCdensity(allarea_Date$rural, 75, ext.out = TRUE)
+rt = DCdensity(allarea_Date$traffic, 75, ext.out = TRUE)
+x = rowMeans(allarea_Date[ ,-c(1,5)])
+rx = DCdensity(x, 75, ext.out = TRUE)
 #robustness check
 r = DCdensity(allarea_Date$us, 75, ext.out = TRUE)
+
