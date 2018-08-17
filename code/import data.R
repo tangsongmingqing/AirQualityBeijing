@@ -76,3 +76,4 @@ saveRDS(s4, file = "~/AirQualityBeijing/data/usPM2.5/usPM2.52016.RDS")
 us2017 = read_csv("beijing2017.csv")
 s5 = us2017[ ,-c(1,2,8:10)] 
 saveRDS(s5, file = "~/AirQualityBeijing/data/usPM2.5/usPM2.52017.RDS")
+ 
